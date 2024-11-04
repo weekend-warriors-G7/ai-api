@@ -29,7 +29,10 @@ def generateScore(image1, image2):
     return score
     
 if __name__ == "__main__":
-    image1 = r"D:\AI-API\ai-api\img4.png"
-    image2 = r"D:\AI-API\ai-api\img5.png"
+    image1 = r"D:\AI-API\ai-api-v2\textila.png"
+    image2 = r"D:\AI-API\ai-api-v2\piele.png"
     print(f"similarity Score: ", round(generateScore(image1, image2), 2))
+    
+    torch.save(model, r"D:\AI-API\ai-api-v2\saved_model.ph")
+    
     #similarity Score: 76.77
