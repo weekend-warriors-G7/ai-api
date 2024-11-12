@@ -5,11 +5,13 @@ from sentence_transformers import util
 from PIL import Image
 
 device = "cuda" if torch.cuda.is_available() else "cpu"
-model = models.resnet50(weights="ResNet50_Weights.IMAGENET1K_V2")
+model = models.efficientnet_b0(weights="EfficientNet_B0_Weights.IMAGENET1K_V1")
 model.to(device)
 model.eval()
 
 model = torch.nn.Sequential(*list(model.children())[:-1])
+
+print(model)
 
 preprocess_transform = transforms.Compose([
     transforms.Resize(232),
@@ -50,5 +52,5 @@ def image_simmilarity(img1, img2):
 #feature_vector = features.view(features.size(0), -1).squeeze()
 
 if __name__ == "__main__":
-    torch.save(model, r"D:\AI-API\ai-api-v2\resnet_50_imagenet1kv2.ph")
-    print(image_simmilarity("cargo.jpg", "piele.png"))
+    torch.save(model, r"./efficientnet_b0.ph")
+    print(image_simmilarity("piele.png", "textila.png"))

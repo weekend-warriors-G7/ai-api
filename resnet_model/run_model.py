@@ -1,10 +1,12 @@
 import torch
+import time
+
 from torchvision import transforms
 from sentence_transformers import util
 from PIL import Image
     
 class ImageSimmilarity:
-    def __init__(self, model_path = r"D:\AI-API\ai-api-v2\resnet_model\resnet_50_imagenet1kv2.ph"):
+    def __init__(self, model_path = r"./efficientnet_b1.ph"):
         self.__model = torch.load(model_path, weights_only=False)
         self.__device = device = "cuda" if torch.cuda.is_available() else "cpu"
         self.__model.to(device)
@@ -37,11 +39,19 @@ class ImageSimmilarity:
     
     #image_simmilarity returns a value between [-1, 1], the higher, the better
     def image_simmilarity(self, img1_path, img2_path):
-        cos_scores = util.pytorch_cos_sim(self.image_encode(self.read_image(img1_path)), self.image_encode(self.read_image(img2_path)))
-        score = round(float(cos_scores[0][0]), 4)
+        img1_extracted_features = self.image_encode(self.read_image(img1_path))
+        img2_extracted_features = self.image_encode(self.read_image(img2_path))
+
+        cos_scores = util.pytorch_cos_sim(img1_extracted_features, img2_extracted_features)
+        score = round(float(cos_scores[0][0]), 10)
         return score
         
 
 if __name__ == "__main__":
     sim_class = ImageSimmilarity()
-    print(sim_class.image_simmilarity("cargo.jpg", "piele.png"))
+
+    start_time = time.time()
+    print(f'Simmilarity score is: {sim_class.image_simmilarity("piele.png", "textila.png")}')    
+    end_time = time.time()
+
+    print(f'Execution took: {end_time - start_time}')
