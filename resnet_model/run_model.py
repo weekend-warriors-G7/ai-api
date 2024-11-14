@@ -30,8 +30,7 @@ class ImageSimmilarity:
         input_tensor = self.__preprocess_transform(image)
 
         # Add a batch dimension (since the model expects a batch of images)
-        input_batch = input_tensor.unsqueeze(0)
-        input_batch.to(self.__device)
+        input_batch = input_tensor.unsqueeze(0).to(self.__device)
         
         with torch.no_grad():  # No need to track gradients for feature extraction
             extracted_features = self.__model(input_batch)
