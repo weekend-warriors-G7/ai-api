@@ -1,5 +1,6 @@
 import re
-import requests
+import subprocess
+import os
 
 def get_filename_and_extension(url):
     pattern = r"/([^/]+)(\.[^.]+)$"
@@ -13,18 +14,26 @@ def get_filename_and_extension(url):
         return None
 
 def save_imgur_image(link: str, CACHE_PATH: str):
-    filename = get_filename_and_extension(link)
+    filename_info = get_filename_and_extension(link)
+    if filename_info is None:
+        raise Exception("Invalid URL: Unable to extract filename and extension.")
 
-    # Make request to the image.
-    requestData = requests.get(link, stream=True)
+    filename, filename_without_extension, file_extension = filename_info
+    save_path = os.path.join(CACHE_PATH, filename)
 
-    # Something happend while getting shit idk.
-    if requestData.status_code != 200:
-        raise Exception("Error occured while making Imgur request at link (" + str(link) + ")! Error code: " + str(requestData.status_code))
+    # If file exists do not download again.
+    if os.path.exists(save_path):
+        return save_path
 
-    # Save the image.
-    with open(CACHE_PATH + filename, 'wb') as handler:
-        for chunk in response.iter_content(1024):
-            handler.write(chunk)
-    
-    return CACHE_PATH + filename
+    # Execute curl to download the image
+    try:
+        result = subprocess.run(
+            ["curl", "-L", "-o", save_path, link],
+            check=True,
+            text=True,
+            capture_output=True
+        )
+    except subprocess.CalledProcessError as e:
+        raise Exception(f"Error occurred while downloading the image: {e.stderr}")
+
+    return save_path

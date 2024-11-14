@@ -28,6 +28,6 @@ def compare():
         second_path = save_imgur_image(data["second"], CACHE_PATH)
     except Exception as error:
         return jsonify(error.__str__())
-
+    
     result, time = get_similarity(first_path, second_path)
     return jsonify(result)

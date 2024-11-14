@@ -6,7 +6,7 @@ from sentence_transformers import util
 from PIL import Image
     
 class ImageSimmilarity:
-    def __init__(self, model_path = r"./efficientnet_b1.ph"):
+    def __init__(self, model_path = r"./resnet_model/efficientnet_b1.ph"):
         self.__model = torch.load(model_path, weights_only=False)
         self.__device = device = "cuda" if torch.cuda.is_available() else "cpu"
         self.__model.to(device)
@@ -51,6 +51,6 @@ def get_similarity(first: str, second: str):
     sim_class = ImageSimmilarity()
 
     start_time = time.time()
-    result = sim_class.image_simmilarity("piele.png", "textila.png")
+    result = sim_class.image_simmilarity(first, second)
     end_time = time.time()
     return result, end_time - start_time
