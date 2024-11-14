@@ -1,4 +1,5 @@
 import os
+from resnet_model.run_model import get_similarity
 from imgur import save_imgur_image
 from flask import Flask, request, jsonify
 from config import CACHE_PATH
@@ -20,10 +21,13 @@ def compare():
     os.makedirs(CACHE_PATH, exist_ok=True) 
     
     # Let's get the images and cry if we don't.
+    first_path = ""
+    second_path = ""
     try:
-        save_imgur_image(data["first"], CACHE_PATH)
-        save_imgur_image(data["second"], CACHE_PATH)
+        first_path = save_imgur_image(data["first"], CACHE_PATH)
+        second_path = save_imgur_image(data["second"], CACHE_PATH)
     except Exception as error:
         return jsonify(error.__str__())
 
-    return jsonify(data)
+    result, time = get_similarity(first_path, second_path)
+    return jsonify(result)

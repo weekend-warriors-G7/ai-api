@@ -26,3 +26,5 @@ def save_imgur_image(link: str, CACHE_PATH: str):
     with open(CACHE_PATH + filename, 'wb') as handler:
         for chunk in response.iter_content(1024):
             handler.write(chunk)
+    
+    return CACHE_PATH + filename

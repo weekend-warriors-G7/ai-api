@@ -47,11 +47,10 @@ class ImageSimmilarity:
         return score
         
 
-if __name__ == "__main__":
+def get_similarity(first: str, second: str):
     sim_class = ImageSimmilarity()
 
     start_time = time.time()
-    print(f'Simmilarity score is: {sim_class.image_simmilarity("piele.png", "textila.png")}')    
+    result = sim_class.image_simmilarity("piele.png", "textila.png")
     end_time = time.time()
-
-    print(f'Execution took: {end_time - start_time}')
+    return result, end_time - start_time
