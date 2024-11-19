@@ -6,12 +6,12 @@ from config import CACHE_PATH
 
 app = Flask(__name__)
 
-def compare_image(first_path: str, second_path: str):
+def compare_image(first_path: str, second_path_link: str):
     first_path = save_imgur_image(first_path, CACHE_PATH)       #
-    second_path = save_imgur_image(second_path, CACHE_PATH)     # Get local path for the imgur paths.
+    second_path = save_imgur_image(second_path_link, CACHE_PATH)     # Get local path for the imgur paths.
     result, time = get_similarity(first_path, second_path)
     _, output, _ = get_filename_and_extension(second_path)
-    return output, result
+    return second_path_link, result
 
 @app.route('/compare', methods=['POST'])
 def compare():
@@ -44,3 +44,7 @@ def compare():
 
     final_result.sort(key=lambda x: x["confidence"], reverse=True)
     return jsonify(final_result)
+
+
+if __name__ == "__main__":
+    app.run(debug=True)
