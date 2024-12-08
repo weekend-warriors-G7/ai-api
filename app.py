@@ -30,17 +30,17 @@ def compare():
     # Make cache dir if it doesnt exist.
     os.makedirs(CACHE_PATH, exist_ok=True) 
     
-    # Let's get the images and cry if we don't.
+    # Let's get the images and ignore the erroring images if something is wrong.
     final_result = []
-    try:
-        for otherImage in data["others"]:
+    for otherImage in data["others"]:
+        try:
             identifier, result = compare_image(data["source"], otherImage)
             element = dict()
             element["id"] = identifier
             element["confidence"] = result 
             final_result.append(element)
-    except error as Exception:
-        return jsonify(error.__str__())
+        except error as Exception:
+            pass
 
     final_result.sort(key=lambda x: x["confidence"], reverse=True)
     return jsonify(final_result)
