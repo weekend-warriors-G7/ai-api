@@ -23,7 +23,8 @@ class ImageSimmilarity:
         ])
         
     def read_image(self, image_path):
-        return Image.open(image_path)
+        loaded_image = Image.open(image_path)
+        return loaded_image.convert('RGB')
         
     def image_encode(self, image):
         # Apply the preprocessing to the image
